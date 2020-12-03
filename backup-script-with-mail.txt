@@ -1,0 +1,25 @@
+
+
+#!/bin/sh
+#Procedures = For DB Backup
+#Scheduled at : Every Day 22:00
+
+v_path=/etc/database_jobs/db_backup
+logfile_path=/etc/database_jobs
+v_file_name=DB_Production
+v_cnt=0
+
+MAILTO="abc@as.in"
+touch "$logfile_path/kaka_db_log.log"
+
+#DB Backup
+mysqldump -uusername -ppassword -h111.111.111.111 ddbname > $v_path/$v_file_name`date +%Y-%m-%d`.sql 
+if [ "$?" -eq 0 ]
+  then
+   v_cnt=`expr $v_cnt + 1`
+  mail -s "DB Backup has been done successfully" $MAILTO < $logfile_path/db_log.log
+ else
+   mail -s "Alert : kaka DB Backup has been failed" $MAILTO < $logfile_path/db_log.log
+   exit
+fi
+
